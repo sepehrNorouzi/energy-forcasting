@@ -35,13 +35,14 @@ PROJECT_NAME = config('PROJECT_NAME', default="energy_forecasting")
 
 INSTALLED_APPS = [
     'django.contrib.admin',
-    'user.apps.UserConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'common.apps.CommonConfig'
+    'energy_data',
+    'weather',
+    'forecasting',
 ]
 
 MIDDLEWARE = [
@@ -101,9 +102,6 @@ CACHES = {
         }
     }
 }
-
-
-AUTH_USER_MODEL = 'user.User'
 
 
 # Password validation
