@@ -1,0 +1,11 @@
+Django==5.2.5
+djangorestframework==3.15.2
+djangorestframework-simplejwt==5.3.1
+djoser==2.2.3
+psycopg2-binary==2.9.9
+pillow==10.4.0
+gunicorn==23.0.0
+django-redis==5.4.0
+redis==5.0.6
+Markdown==3.6
+python-decouple==3.8
