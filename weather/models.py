@@ -20,6 +20,8 @@ class WeatherData(models.Model):
     precipitation_mm = models.FloatField(null=True, blank=True)
     solar_irradiance_wm2 = models.FloatField(null=True, blank=True)
     pressure_hpa = models.FloatField(null=True, blank=True)
+    radiation_direct_wm2 = models.FloatField(null=True, blank=True)
+    radiation_diffuse_wm2 = models.FloatField(null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
 

@@ -61,7 +61,7 @@ class LoadDataAdmin(admin.ModelAdmin):
             accuracy = max(0, 100 - error_pct)
             color = "green" if accuracy > 95 else "orange" if accuracy > 90 else "red"
             return format_html(
-                '<span style="color: {};">{:.1f}%</span>',
+                '<span style="color: {};">{}%</span>',
                 color, accuracy
             )
         return "-"
@@ -134,7 +134,7 @@ class RenewableGenerationAdmin(admin.ModelAdmin):
             pct = obj.capacity_factor * 100
             color = "green" if pct > 50 else "orange" if pct > 25 else "red"
             return format_html(
-                '<span style="color: {};">{:.1f}%</span>',
+                '<span style="color: {};">{}%</span>',
                 color, pct
             )
         return "-"
@@ -166,7 +166,7 @@ class EnergyPriceAdmin(admin.ModelAdmin):
         if obj.day_ahead_price:
             color = "red" if obj.day_ahead_price > 100 else "orange" if obj.day_ahead_price > 50 else "green"
             return format_html(
-                '<span style="color: {};">{:.2f} {}</span>',
+                '<span style="color: {};">{} {}</span>',
                 color, obj.day_ahead_price, obj.currency
             )
         return "-"
@@ -219,7 +219,7 @@ class DataImportLogAdmin(admin.ModelAdmin):
         total = obj.records_imported + obj.records_updated
         if obj.records_failed > 0:
             return format_html(
-                '<span style="color: orange;">{:,} imported, {} failed</span>',
+                '<span style="color: orange;">{} imported, {} failed</span>',
                 total, obj.records_failed
             )
         return f"{total:,} records"
