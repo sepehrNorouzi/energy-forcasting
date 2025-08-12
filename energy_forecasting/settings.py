@@ -32,6 +32,33 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 PROJECT_NAME = config('PROJECT_NAME', default="energy_forecasting")
 
 # Application definition
+AWS_ACCESS_KEY_ID = os.environ.get("MINIO_ACCESS_KEY")
+AWS_SECRET_ACCESS_KEY = os.environ.get("MINIO_SECRET_KEY")
+AWS_STORAGE_BUCKET_NAME = os.environ.get("MINIO_BUCKET_NAME")
+MINIO_SERVER_URL = os.environ.get("MINIO_ENDPOINT", None)
+AWS_S3_REGION_NAME = None
+AWS_S3_USE_SSL = True
+AWS_S3_ENDPOINT_URL = os.environ.get("MINIO_ENDPOINT", None)
+
+STORAGES = {
+    "default": {
+        "BACKEND": 'storages.backends.s3boto3.S3Boto3Storage',
+        "OPTIONS": {
+            'access_key': AWS_ACCESS_KEY_ID,
+            'secret_key': AWS_SECRET_ACCESS_KEY,
+            'bucket_name': AWS_STORAGE_BUCKET_NAME,
+            'endpoint_url': AWS_S3_ENDPOINT_URL,
+            'default_acl': None,
+            'querystring_auth': True,
+            'file_overwrite': True,
+            'use_ssl': AWS_S3_USE_SSL,
+        },
+    },
+    'staticfiles': {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    }
+}
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -43,6 +70,7 @@ INSTALLED_APPS = [
     'energy_data',
     'weather',
     'forecasting',
+    'analytics'
 ]
 
 MIDDLEWARE = [
@@ -147,7 +175,7 @@ TEMP_URL = '/temp/'
 TEMP_ROOT = os.path.join(BASE_DIR, 'temp')
 if not os.path.exists(TEMP_ROOT):
     os.makedirs(TEMP_ROOT)
-
+#
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 if not os.path.exists(MEDIA_ROOT):

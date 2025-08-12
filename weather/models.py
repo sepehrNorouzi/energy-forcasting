@@ -23,6 +23,13 @@ class WeatherData(models.Model):
     radiation_direct_wm2 = models.FloatField(null=True, blank=True)
     radiation_diffuse_wm2 = models.FloatField(null=True, blank=True)
 
+    @property
+    def total_horizontal_irradiance(self):
+        '''Calculate total horizontal irradiance from components'''
+        if self.radiation_direct_wm2 and self.radiation_diffuse_wm2:
+            return self.radiation_direct_wm2 + self.radiation_diffuse_wm2
+        return self.solar_irradiance_wm2
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

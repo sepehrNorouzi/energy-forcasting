@@ -9,3 +9,6 @@ django-redis==5.4.0
 redis==5.0.6
 Markdown==3.6
 python-decouple==3.8
+ydata-profiling==4.16.1
+boto3==1.39.3
+django-storages==1.14.6

@@ -1,0 +1,122 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">Energy Forecasting Analytics</a></h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block content_title %}
+<h1>{{ title }}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="module aligned">
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-row">
+            <div>
+                <label for="id_countries">Countries (optional):</label>
+                <input type="text"
+                       name="countries"
+                       id="id_countries"
+                       placeholder="e.g., DE,FR,GB,NL (leave empty for all countries)"
+                       style="width: 400px;">
+                <p class="help">Comma-separated list of country codes. Leave empty to include all countries.</p>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div style="float: left; margin-right: 20px;">
+                <label for="id_start_date">Start Date (optional):</label>
+                <input type="date" name="start_date" id="id_start_date">
+                <p class="help">Leave empty for last 30 days</p>
+            </div>
+
+            <div style="float: left; margin-right: 20px;">
+                <label for="id_end_date">End Date (optional):</label>
+                <input type="date" name="end_date" id="id_end_date">
+                <p class="help">Leave empty for latest data</p>
+            </div>
+        </div>
+
+        <div class="form-row" style="clear: both;">
+            <div style="float: left; margin-right: 20px;">
+                <label for="id_report_type">Report Type:</label>
+                <select name="report_type" id="id_report_type">
+                    <option value="minimal">Minimal (faster generation)</option>
+                    <option value="explorative">Explorative (detailed analysis)</option>
+                    <option value="full">Full (comprehensive, slowest)</option>
+                </select>
+                <p class="help">Minimal reports are faster but less detailed</p>
+            </div>
+
+            <div style="float: left;">
+                <label for="id_sample_size">Sample Size:</label>
+                <select name="sample_size" id="id_sample_size">
+                    <option value="10000">10,000 records (fast)</option>
+                    <option value="50000" selected>50,000 records (recommended)</option>
+                    <option value="100000">100,000 records (thorough)</option>
+                    <option value="500000">500,000 records (comprehensive)</option>
+                </select>
+                <p class="help">Larger samples provide better insights but take longer</p>
+            </div>
+        </div>
+
+        <div class="form-row" style="clear: both; margin-top: 20px;">
+            <div class="submit-row">
+                <input type="submit" value="Generate Report" class="default" name="_generate">
+                <a href="{% url 'admin:analytics_dataprofilingreport_changelist' %}" class="button cancel-link">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="module" style="margin-top: 30px;">
+    <h2>About Data Profiling Reports</h2>
+    <p>Data profiling reports provide comprehensive analysis of your energy and weather datasets including:</p>
+    <ul>
+        <li><strong>Data Completeness:</strong> Missing values, data gaps, and coverage analysis</li>
+        <li><strong>Data Quality:</strong> Outliers, duplicates, and consistency checks</li>
+        <li><strong>Statistical Summary:</strong> Distributions, correlations, and patterns</li>
+        <li><strong>Time Series Analysis:</strong> Temporal patterns and seasonality</li>
+        <li><strong>Cross-Dataset Relationships:</strong> Energy vs weather correlations</li>
+    </ul>
+
+    <h3>Report Types:</h3>
+    <ul>
+        <li><strong>Minimal:</strong> Basic statistics and missing value analysis (~2-5 minutes)</li>
+        <li><strong>Explorative:</strong> Detailed correlations and pattern analysis (~5-15 minutes)</li>
+        <li><strong>Full:</strong> Complete analysis with all visualizations (~15-45 minutes)</li>
+    </ul>
+
+    <h3>Tips:</h3>
+    <ul>
+        <li>Start with a minimal report on a subset of countries (e.g., DE,FR) to validate the setup</li>
+        <li>Use date ranges to focus on specific periods of interest</li>
+        <li>Reports are stored in S3 and accessible via the generated links</li>
+        <li>Large reports may take significant time - check the generation log for progress</li>
+    </ul>
+</div>
+
+<script>
+// Set default dates to last 30 days
+document.addEventListener('DOMContentLoaded', function() {
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - 30);
+
+    // Format dates as YYYY-MM-DD
+    const formatDate = (date) => date.toISOString().split('T')[0];
+
+    // Set default values
+    document.getElementById('id_end_date').value = formatDate(endDate);
+    document.getElementById('id_start_date').value = formatDate(startDate);
+});
+</script>
+
+{% endblock %}
